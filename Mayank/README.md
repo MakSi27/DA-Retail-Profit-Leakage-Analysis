@@ -11,7 +11,7 @@ Based on our project work, my typical tech stack includes:
 - **Data Visualization:** Matplotlib, seaborn
 - **Machine Learning (if applicable):** scikit-learn
 
-*(Feel free to update this section as we add more tools and technologies!)*
+
 
 ## Project Overview: Retail Profit Leakage Analysis
 In the competitive landscape of retail, maximizing profit isn't just about increasing sales; it's also about preventing losses. **Profit Leaks** occur when potential revenue is lost due to various operational, pricing, or supply chain inefficiencies. 
@@ -22,4 +22,4 @@ In the competitive landscape of retail, maximizing profit isn't just about incre
 - Formulate data-driven strategies and recommendations to plug these leaks and improve the overall margin.
 
 ---
-*Note: All specific scripts, notebooks, and models developed by me will reside within this folder.*
+
