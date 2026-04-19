@@ -1,122 +1,31 @@
-SELECT * FROM retail_processed_data LIMIT 10;
-
--- Row Count
-select count(*) from retail_processed_data;
-
------------------------------------Checking Dataset Structure-------------------------------------------------------
-
-select * from retail_processed_data limit 10;
-
-------------------------------------------Total Buisness Overview--------------------------------------------------
---# Total Sales
-select sum(Sales) as total_sales from retail_processed_data;
-
---# Total Profit
-select sum(Profit) as total_profit from retail_processed_data;
-
---# Average Profit Margin
-select avg(Profit_Margin) as avg_Profit_Margin
-from retail_processed_data;
-
-----------------------------------------Sales & Profit by Region--------------------------------------------------
-select
-    Region,
-    sum(Sales) as total_Sales,
-    sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-order by 3 desc;
-
---------------------------------------- Category Performance------------------------------------------------------
-select
-    Category,
-    sum(Sales) as total_Sales,
-    sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-order by 3 desc;
-
----------------------------------------Sub-Category Profit Analysis-------------------------------------------------
-select Sub_Category, sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-order by 2;
-
--------------------------------------- High Sales but Low Profit---------------------------------------------------
-select Product_Name, Sales, Profit
-from retail_processed_data
-where
-    Sales > 1000
-    and Profit < 50
-order by Profit;
-
----------------------------------------Top 10 Customers-----------------------------------------------------------
-select Customer_Name, Sum(Sales) as total_Sales
-from retail_processed_data
-group by
-    1
-order by 2 desc
-limit 10;
-
--------------------------------------Monthly Sales Analysis------------------------------------------------------
-select Month, sum(Sales) as Monthly_Sales
-from retail_processed_data
-group by
-    1
-order by 1;
-
----------------------------------------Region Ranking------------------------------------------------------------
-select
-    Region,
-    sum(Profit) as total_Profit,
-    rank() over (
-        order by sum(Profit) desc
-    ) as Profit_rank
-from retail_processed_data
-group by
-    1;
-
-----------------------------------------Loss Making Products-----------------------------------------------------
-select * from retail_processed_data where Profit < 0;
-
----------------------------------------Order Per Segment-------------------------------------------------------
-
-select Segment, count(Order_ID) as total_Orders
-from retail_processed_data
-group by
-    1
-order by 2 desc;
-
----------------------------------------Average Discount By Category----------------------------------------------
-select Category, Avg(Discount) as Avg_Discount
-from retail_processed_data
-group by
-    1
-order by 2 desc;
-
---------------------------------------Yearly Sales Growth--------------------------------------------------------
-select Year, Sum(Sales) as total_Sales
-from retail_processed_data
-group by
-    1
-order by 1;
-
-------------------------------------Top 10 Products BY Profit-----------------------------------------------------
-select Product_Name, sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-order by 2 desc
-limit 10;
-
------------------------------------ Negative Profit Sub-Category------------------------------------------------
-select Sub_Category, sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-having
-    sum(Profit) < 0
-order by 2;
+DROP TABLE IF EXISTS retail_sales;
+CREATE TABLE retail_processed_data (
+    row_id INTEGER,
+    order_id VARCHAR(20),
+    order_date DATE,
+    ship_date DATE,
+    ship_mode VARCHAR(50),
+    customer_id VARCHAR(20),
+    customer_name VARCHAR(100),
+    segment VARCHAR(50),
+    country VARCHAR(50),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    postal_code VARCHAR(20),
+    region VARCHAR(20),
+    product_id VARCHAR(20),
+    category VARCHAR(50),
+    sub_category VARCHAR(50),
+    product_name VARCHAR(200),
+    sales NUMERIC(10, 2),
+    quantity INTEGER,
+    discount NUMERIC(5, 2),
+    profit NUMERIC(10, 2),
+    profit_margin NUMERIC(10, 4),
+    loss_flag BOOLEAN,
+    year INTEGER,
+    month INTEGER
+);
+SET datestyle = 'ISO, MDY';
+COPY retail_processed_data
+FROM '.csv' DELIMITER ',' CSV HEADER QUOTE '"';
