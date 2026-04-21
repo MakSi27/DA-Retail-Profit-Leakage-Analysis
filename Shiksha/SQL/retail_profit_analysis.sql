@@ -25,22 +25,26 @@ Loss_Flag	boolean ,
 Year int,
 Month int
 );
-
-select *
-from retail_profit_leakage
+COPY Retail_Profit_Leakage
+FROM 'C:/retail_processed_data.csv'
+DELIMITER ','
+CSV HEADER;
+SELECT *
+FROM retail_profit_leakage
 LIMIT 10;
 
---Row Count 
-select count(*) from retail_profit_leakage;
+-- Row Count 
+select count(*) from retail_profit_leakage ;
 
---Converting the order_id and ship_date into date column
+-- Converting the order_date and ship_date into  date column 
 ALTER TABLE retail_profit_leakage
 ALTER COLUMN order_date TYPE DATE
-USING TO_DATE(order_date,'MM/DD/YYYY');
+USING TO_DATE(order_date,'YYYY/MM/DD');
 
 ALTER TABLE retail_profit_leakage
 ALTER COLUMN ship_date TYPE DATE
-USING TO_DATE(ship_date,'MM/DD/YYYY');
+USING TO_DATE(ship_date,'YYYY/MM/DD ');
+
 -----------------------------------Checking Dataset Structure-------------------------------------------------------
 
 select * from Retail_Profit_Leakage

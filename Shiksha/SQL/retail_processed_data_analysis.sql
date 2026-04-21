@@ -1,119 +1,51 @@
 SELECT * FROM retail_processed_data LIMIT 10;
---Row Count
-SELECT count(*) from retail_processed_data;
-----------------------------------Checking Dataset Structure-------------------------------------------------------
-select * from retail_processed_data limit 10;
-----------------------------------Total Business Overview-------------------------------------------------------
---#Total Sales
-select sum(sales) as total_Sales from retail_processed_data;
 
---#Total Profit
-select sum(Profit) as total_profit from retail_processed_data;
+SELECT column_name
+FROM information_schema.columns
+WHERE table_name = 'retail_processed_data'
+ORDER BY ordinal_position;
 
+SELECT column_name , data_type , is_nullable
+FROM information_schema.columns
+WHERE table_name = 'retail_processed_data'
+ORDER BY ordinal_position;
 
---#Average Profit Margin
-select avg (Profit_Margin) as avg_Profit_Margin
-from retail_processed_data;
+SELECT
+COUNT(*) AS count,
+AVG(Sales) AS avg_sales,
+MIN(Sales) AS min_sales,
+MAX(Sales)  AS max_sales,
+AVG(Quantity) AS avg_quantity,
+MIN(Quantity) AS min_quantity,
+MAX(Quantity) AS max_quantity,
+AVG(Discount) AS avg_discount,
+MIN(Discount) AS min_discount,
+MAX(Discount) AS max_discount,
+AVG(Profit) AS avg_profit,
+MIN(Profit) AS min_profit,
+MAX(Profit) AS max_profit
+FROM retail_processed_data;
 
-----------------------------------Sales & Profit By Region-------------------------------------------------------
-select 
-    Region,
-    sum(Sales) as total_sales,
-    sum(Profit) as total_Profit
-from retail_processed_data
-group BY
-    1
-    order by 3 desc;
+SELECT COUNT(*) AS total_rows FROM retail_processed_data;
+SELECT COUNT(*) AS total_columns
+FROM information_schema.columns
+WHERE table_name = 'retail_processed_data';
 
-----------------------------------Category Performance------------------------------------------------------
-select 
-    Category,
-    sum(Sales) as total_sales,
-    sum(Profit) as total_Profit
-from retail_processed_data
-group BY
-    1
-    order by 3 desc;
+--Total Sales
+SELECT ROUND(SUM(Sales)::NUMERIC, 2) AS total_sales 
+FROM retail_processed_data;
 
----------------------------------------Sub-Category Profit Analysis-------------------------------------------------
+    -- Total Profit
+    SELECT ROUND(SUM(Profit)::NUMERIC, 2) AS total_profit FROM retail_processed_data;
 
-select sub_category,sum(Profit) as total_Profit
-from retail_processed_data
-group by 
-    1
-order by 2;
+-- Sales by Category
+SELECT Category, ROUND(SUM(Sales)::NUMERIC, 2) AS total_sales
+FROM retail_processed_data
+GROUP BY Category
+ORDER BY total_sales DESC;
 
----------------------------------------High Sales but Low Profit-------------------------------------------------
-select Sub_Category,sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-order by 2;
-
----------------------------------------Top 10 Customers-------------------------------------------------
-
-select Customer_Name,sum(Sales) as total_Sales
-from retail_processed_data
-group by
-    1
-order by 2 DESC
-limit 10;
-
--------------------------------------Monthly Sales Analysis------------------------------------------------------
-select Month,sum(Sales) as Monthly_Sales
-from retail_processed_data
-group BY
-    1
-    order by 1;
-
----------------------------------------Region Ranking------------------------------------------------------------
-select 
-    Region,
-    sum(Profit) as total_Profit,
-    rank() over (
-      order by sum(Profit) desc
-    ) as Profit_rank
-from retail_processed_data
-group by
-      1;
-
-----------------------------------------Loss Making Products-----------------------------------------------------
-select * from  retail_processed_data where Profit<0;
-
----------------------------------------Order Per Segment-------------------------------------------------------
-select Segment ,count(Order_ID) as total_Orders
-from retail_processed_data
-group BY
-    1
-order by 2 desc;
-
---------------------------------------Average Discount By Category--------------------------------------------------------
-select Category,Avg(Discount) as Avg_Discount
-from retail_processed_data
-group by
-    1
-order by 2 desc;
-
---------------------------------------Yearly Sales Growth--------------------------------------------------------
-select Year, Sum(Sales) as total_Sales
-from retail_processed_data
-group BY
-      1
-order by 1;
-
-------------------------------------Top 10 Products BY Profit-----------------------------------------------------
-select Product_Name,sum(Profit) as total_Profit
-from retail_processed_data
-group  BY
-      1
-order by 2 DESC
-limit 10;
-
------------------------------------ Negative Profit Sub-Category------------------------------------------------
-select Sub_Category,sum(Profit) as total_Profit
-from retail_processed_data
-group by
-    1
-having
-    sum(Profit) < 0
-order by 2;
+-- Profit by Region
+SELECT Region, SUM(Profit) AS total_profit
+FROM retail_processed_data
+GROUP BY Region
+ORDER BY total_profit DESC;
